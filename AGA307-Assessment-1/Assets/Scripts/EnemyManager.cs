@@ -12,6 +12,9 @@ public class EnemyManager : MonoBehaviour
 
     public GameObject player;
 
+
+    float spawnDelay = 3;
+
     void Start()
     {
        for(int i = 0; i < 101; i++)
@@ -68,7 +71,16 @@ public class EnemyManager : MonoBehaviour
     }
 
 
-
+    IEnumerator SpawnEnemyDelayed()
+    {
+        for (int i = 0; i < SpawnPoints.Length; i++)
+        {
+            int rndEnemy = Random.Range(0, enemyTypes.Length);
+            GameObject enemy = Instantiate(enemyTypes[rndEnemy], SpawnPoints[i].position, SpawnPoints[i].rotation);
+            enemies.Add(enemy);
+            yield return new WaitForSeconds(spawnDelay);
+        }
+    }
 
 
     void Update()
