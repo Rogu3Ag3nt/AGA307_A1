@@ -5,7 +5,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public EnemyTypes myTypes;
-    public int health;
+    public int health = 3;
     
     float moveDistance = 500;
 
@@ -20,14 +20,18 @@ public class Enemy : MonoBehaviour
         if (myTypes == EnemyTypes.Twohanded)
             health = 200;
     }
-  
+
+
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.H))
+            Hit();
         if (Input.GetKeyDown(KeyCode.Space))
         {
             StartCoroutine(Move());
         }
     }
+
     IEnumerator Move()
     {
         for(int i = 0; i < moveDistance; i++)
@@ -56,5 +60,17 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    void Hit()
+    {
+        health--;
+        if(health<= 0)
+        Die();
+    }
+    void Die()
+    {
+        GameEvents.OnEnemyDie(this);
+        StopAllCoroutines();
+        Destroy(this.gameObject);
 
+    }
 }

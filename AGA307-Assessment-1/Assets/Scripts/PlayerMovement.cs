@@ -8,11 +8,14 @@ public class PlayerMovement : MonoBehaviour
     public CharacterController Controller;
 
     public float speed = 12f;
+    public float gravity = -9.81f;
 
     public GameObject projectilePrefab;
     public float projectileSpeed = 1000;
 
     public Transform firingPoint;
+
+    Vector3 velocity;
 
     void Update()
     {
@@ -22,6 +25,9 @@ public class PlayerMovement : MonoBehaviour
         Vector3 move = transform.right * x + transform.forward * z;
 
         Controller.Move(move * speed * Time.deltaTime);
+
+        velocity.y += gravity * Time.deltaTime;
+        Controller.Move(velocity * Time.deltaTime);
 
         if (Input.GetButtonDown("Fire1"))
         {

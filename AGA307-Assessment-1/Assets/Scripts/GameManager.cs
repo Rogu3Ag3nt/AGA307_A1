@@ -2,21 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
     public Gamestate gameState;
     public Difficulty difficulty;
-    int scoreMultiplier = 1;
 
+
+    int scoreMultiplier = 1;
+    public int score = 0;
 
     void Start()
     {
         gameState = Gamestate.start;
         difficulty = Difficulty.Easy;
 
+        GameEvents.EnemyHit += OnEnemyHit;
+
 
         SetUp();
     }
+
+    private void OnDestroy()
+    {
+        GameEvents.EnemyHit -= OnEnemyHit;
+
+    }
+
+
 
     void SetUp()
     {
@@ -35,8 +47,20 @@ public class GameManager : MonoBehaviour
                 break;
         }
     }
+
+    void OnEnemyHit(Enemy e)
+    {
+        AddScore(10);
+    }
+
+
+
     void Update()
     {
         
+    }
+    public void AddScore(int scoreAdd)
+    {
+        score += scoreAdd * scoreMultiplier;
     }
 }

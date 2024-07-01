@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.Animations;
 using UnityEngine;
 
-public class EnemyManager : MonoBehaviour
+public class EnemyManager : Singleton<EnemyManager>
 {
 
     public Transform[] SpawnPoints = new Transform[8];
@@ -23,6 +23,20 @@ public class EnemyManager : MonoBehaviour
         }
         SpawnEnemy();    
     }
+
+
+    private void start ()
+    {
+        GameEvents.EnemyDie += EnemyDied;
+        ShuffleList(enemies);
+    }
+
+
+    private void OnDestroy()
+    {
+        GameEvents.EnemyDie -= EnemyDied;
+    }
+
 
 
     void SpawnEnemy ()
@@ -86,5 +100,13 @@ public class EnemyManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+
+
+    void EnemyDied(Enemy e)
+    {
+        enemies.Remove(e.gameObject);
+        Debug.Log(enemies.Count);
     }
 }
